@@ -19,7 +19,9 @@
     (java.nio.file DirectoryStream FileSystem FileVisitOption Files
                    LinkOption OpenOption Path StandardOpenOption)
     (java.nio.file.attribute FileAttribute)
-    (java.util.zip ZipInputStream ZipOutputStream)))
+    (java.nio.file.spi FileSystemProvider)
+    (java.util.zip ZipInputStream ZipOutputStream)
+    (jdk.nio.zipfs ZipFileSystemProvider)))
 
 (defn uri->path
   "`uri-str` can be either a `String` or a `java.net.URI`."
@@ -123,3 +125,11 @@
 
 (defn delete-if-exists ^Boolean [^Path p]
   (Files/deleteIfExists p))
+
+(defn providers []
+  (FileSystemProvider/installedProviders))
+
+(comment
+  (-> (providers) first type supers)
+  ZipFileSystemProvider
+  )
