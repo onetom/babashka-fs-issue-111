@@ -2,11 +2,8 @@
   (:require
     [babashka.fs :as fs]
     [ginoco.fs :as gfs]
-    [clojure.java.process :as process]
-    [clojure.pprint :as pp])
+    [repl.common :refer :all])
   (:import (java.nio.file Path StandardOpenOption)))
-
-(defn ? [x] (doto x pp/pprint))
 
 (def bucket
   (-> "%s-babashka-fs-issue-111"
@@ -17,12 +14,6 @@
 
 (def make-bucket-cmd
   (str "aws s3 mb s3://" bucket))
-
-(defn sh [cmd & args]
-  (apply process/start {:out :inherit :err :inherit} cmd args))
-
-(defn nix-run [cmdline-str]
-  (sh "nix-shell" "-p" "awscli2" "--run" cmdline-str))
 
 (comment
   ;; Per-path file system path-separator
@@ -38,7 +29,7 @@
 
   (-> s3-path
       (.resolve "test.txt")
-      (gfs/write-str "Babashka fs!" StandardOpenOption/CREATE))
+      (gfs/write-str "Babashka fs!\n" StandardOpenOption/CREATE))
 
   (-> s3-path gfs/list-dir)
   (-> s3-path gfs/walk)
