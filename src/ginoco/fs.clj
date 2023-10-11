@@ -16,12 +16,21 @@
     (java.io InputStream OutputStream)
     (java.net URI)
     (java.nio.charset Charset)
-    (java.nio.file DirectoryStream FileSystem FileVisitOption Files
-                   LinkOption OpenOption Path StandardOpenOption)
+    (java.nio.file
+      DirectoryStream FileSystem FileSystems FileVisitOption Files
+      LinkOption OpenOption Path StandardOpenOption)
     (java.nio.file.attribute FileAttribute)
     (java.nio.file.spi FileSystemProvider)
     (java.util.zip ZipInputStream ZipOutputStream)
     (jdk.nio.zipfs ZipFileSystemProvider)))
+
+(defn jar-uri [^Path p]
+  (URI. "jar" (str (.toUri p)) nil))
+
+(defn new-fs [uri-or-path & {:as opts}]
+  (FileSystems/newFileSystem uri-or-path (-> opts
+                                             (update-keys (comp str symbol))
+                                             (update-vals str))))
 
 (defn uri->path
   "`uri-str` can be either a `String` or a `java.net.URI`."
