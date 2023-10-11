@@ -52,6 +52,9 @@
 (defn parent ^Path [^Path p]
   (.getParent p))
 
+(defn root ^Path [^Path p]
+  (.getRoot p))
+
 (defn exists
   (^Boolean [^Path p*] (exists p* true))
   (^Boolean [^Path p follow-links?]
