@@ -15,6 +15,8 @@
 (def make-bucket-cmd
   (str "aws s3 mb s3://" bucket))
 
+(def content "Babashka fs!\n")
+
 (comment
   ;; Per-path file system path-separator
   (-> s3-path .getFileSystem .getSeparator)
@@ -29,7 +31,7 @@
 
   (-> s3-path
       (.resolve "test.txt")
-      (gfs/write-str "Babashka fs!\n" StandardOpenOption/CREATE))
+      (gfs/write-str content StandardOpenOption/CREATE))
 
   (-> s3-path gfs/list-dir)
   (-> s3-path gfs/walk)
